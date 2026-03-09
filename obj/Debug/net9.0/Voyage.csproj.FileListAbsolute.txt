@@ -9,3 +9,4 @@
 /home/DinnerBone/Projects/Voyage/obj/Debug/net9.0/refint/Voyage.dll
 /home/DinnerBone/Projects/Voyage/obj/Debug/net9.0/Voyage.pdb
 /home/DinnerBone/Projects/Voyage/obj/Debug/net9.0/ref/Voyage.dll
+/home/DinnerBone/Projects/Voyage/obj/Debug/net9.0/Voyage.sourcelink.json
