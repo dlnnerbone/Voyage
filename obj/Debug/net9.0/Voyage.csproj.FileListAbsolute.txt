@@ -1,0 +1,11 @@
+/home/DinnerBone/Projects/Voyage/bin/Debug/net9.0/Voyage.deps.json
+/home/DinnerBone/Projects/Voyage/bin/Debug/net9.0/Voyage.dll
+/home/DinnerBone/Projects/Voyage/bin/Debug/net9.0/Voyage.pdb
+/home/DinnerBone/Projects/Voyage/obj/Debug/net9.0/Voyage.GeneratedMSBuildEditorConfig.editorconfig
+/home/DinnerBone/Projects/Voyage/obj/Debug/net9.0/Voyage.AssemblyInfoInputs.cache
+/home/DinnerBone/Projects/Voyage/obj/Debug/net9.0/Voyage.AssemblyInfo.cs
+/home/DinnerBone/Projects/Voyage/obj/Debug/net9.0/Voyage.csproj.CoreCompileInputs.cache
+/home/DinnerBone/Projects/Voyage/obj/Debug/net9.0/Voyage.dll
+/home/DinnerBone/Projects/Voyage/obj/Debug/net9.0/refint/Voyage.dll
+/home/DinnerBone/Projects/Voyage/obj/Debug/net9.0/Voyage.pdb
+/home/DinnerBone/Projects/Voyage/obj/Debug/net9.0/ref/Voyage.dll
