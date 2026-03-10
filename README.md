@@ -1,6 +1,3 @@
-Voyage is an experimental; hobbyist Entity Library planned to focus on Sparse and Dense sets with the minimal
-dictionary usage.
+Voyage is an experimental; hobbyist Entity Library that focuses on a more unique approach to Sparse and Dense sets, involving a more Flag-Array oriented approach where flags are used in arrays to signal what components are active or not.
 
-This project is made for fun.
-
-there are no current examples of this library and its usage.
+there are no examples of this library being used.
