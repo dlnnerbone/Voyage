@@ -29,7 +29,7 @@ public class Module<T> : IModule<T>, IModule
       public void ToggleSelection(IEnumerable<uint> indices, byte toggle)
       {
             uint[] toArr = indices.ToArray();
-            
+
             for(int i = 0; i < toArr.Length; i++)
             {
                   ref readonly var index = ref toArr[i];
