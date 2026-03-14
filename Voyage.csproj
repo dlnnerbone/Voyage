@@ -10,4 +10,8 @@
     <Description>A hobbyist, experimental Entity Framework.</Description>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="BenchmarkDotNet" Version="0.15.8" />
+  </ItemGroup>
+
 </Project>

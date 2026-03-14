@@ -10,3 +10,13 @@
 /home/DinnerBone/Projects/Voyage/obj/Debug/net9.0/Voyage.pdb
 /home/DinnerBone/Projects/Voyage/obj/Debug/net9.0/ref/Voyage.dll
 /home/DinnerBone/Projects/Voyage/obj/Debug/net9.0/Voyage.sourcelink.json
+/home/DinnerBone/Projects/Voyage/obj/Debug/net9.0/Voyage.csproj.AssemblyReference.cache
+/home/DinnerBone/Projects/Voyage/bin/Debug/net9.0/x86/KernelTraceControl.dll
+/home/DinnerBone/Projects/Voyage/bin/Debug/net9.0/x86/KernelTraceControl.Win61.dll
+/home/DinnerBone/Projects/Voyage/bin/Debug/net9.0/x86/msdia140.dll
+/home/DinnerBone/Projects/Voyage/bin/Debug/net9.0/amd64/KernelTraceControl.dll
+/home/DinnerBone/Projects/Voyage/bin/Debug/net9.0/amd64/msdia140.dll
+/home/DinnerBone/Projects/Voyage/bin/Debug/net9.0/arm64/KernelTraceControl.dll
+/home/DinnerBone/Projects/Voyage/bin/Debug/net9.0/arm64/msdia140.dll
+/home/DinnerBone/Projects/Voyage/bin/Debug/net9.0/TraceReloggerLib.dll
+/home/DinnerBone/Projects/Voyage/bin/Debug/net9.0/Dia2Lib.dll
