@@ -1,5 +1,12 @@
 namespace Voyage;
 
+// the IUpdatable interfaces.
+
+
+/// <summary>
+/// the base IUpdatable interface for classes that need an update per-frame method, it's recommended to put other update methods inside here,
+/// unless you're using generics.
+/// </summary>
 public interface IUpdatable
 {
     void Update();
@@ -13,14 +20,4 @@ public interface IUpdatable<T> : IUpdatable
 public interface IUpdatableMutable<T> : IUpdatable
 {
     void Update(ref T component);
-}
-
-public interface IDynamicUpdatable<TReturn, T> : IUpdatable
-{
-    TReturn Update(in T component);
-}
-
-public interface IDynamicMutableUpdatable<TReturn, T> : IUpdatable
-{
-    TReturn Update(ref T component);
 }

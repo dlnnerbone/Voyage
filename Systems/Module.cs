@@ -6,7 +6,7 @@ public class Module<T> : IModule<T>, IModule
       internal ushort[] _denseSet = Array.Empty<ushort>();
       internal byte[] _sparseSet;
 
-      public ref T[] GetBuffer() => ref _buffer;
+      public T[] GetBuffer() => _buffer;
 
       internal Module(uint initialAmount)
       {

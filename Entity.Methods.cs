@@ -34,5 +34,7 @@ public partial struct Entity : IHasID<int>, IEquatable<Entity>
             (ushort, ushort) ver = (ArchetypeID, Queue), ver2 = (other.ArchetypeID, other.Queue);
             return ver == ver2;
       }
+
+      public static bool Equals(Entity main, Entity other) => main.Equals(other);
       
 }

@@ -9,5 +9,5 @@ internal interface IModule
 
 internal interface IModule<T> : IModule
 {
-      public ref T[] GetBuffer();
+      public T[] GetBuffer();
 }
