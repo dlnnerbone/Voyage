@@ -30,4 +30,31 @@ public partial class Archetype
             TypeCount = 0;
       }
 
+      public object this[int id] => _dataMatrix[id];
+
+      /// <summary>
+      /// this method returns the desired module.
+      /// 
+      /// note: this method assumes the <see cref="_dataMatrix"> array  has Module elements.
+      /// </summary>
+      /// <typeparam name="T">the type to look for.</typeparam>
+      /// <returns>returns the module holding the specified type.</returns>
+      /// <exception cref="ArgumentOutOfRangeException">this exception is called when the Module types ID is not in the bounds of the array.</exception>
+      /// <exception cref="InvalidCastException">if compID is -1, component is not within the bounds of the array.</exception>
+      public Module<T> GetModule<T>()
+      {
+            uint compID = ComponentMetadata<T>.ID;
+
+            if (compID > _indexMap.Length - 1)
+            {
+                  throw new ArgumentOutOfRangeException($"{typeof(T)} is not in the archetype. {compID} > {_indexMap.Length - 1}");
+            }
+
+            sbyte indexToMod = _indexMap[compID];
+
+            if (indexToMod == -1) throw new ArgumentNullException($"can't cast a type that isn't defined in the archetype.");
+
+            return (Module<T>)_dataMatrix[indexToMod];
+      }
+
 }
