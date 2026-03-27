@@ -7,7 +7,7 @@ public class ArchetypeBuilder : IArchetypeBuilder
 
       internal object[] _modules;
       internal string _collectedTypes = null!;
-      internal sbyte[] _indexMap = Array.Empty<sbyte>();
+      internal byte[] _indexMap = Array.Empty<byte>();
       internal Type[] _types;
 
       private sbyte _typesCounted = 0;
