@@ -11,10 +11,12 @@ public partial class Archetype
       internal string _collectedTypes;
       internal object[] _dataMatrix;
       internal byte[] _indexMap;
-
+      
       public ImmutableHashSet<Type> TypeSet => _typeSet.ToImmutableHashSet();
       public int ArchetypeID { get; internal set; }
       public int TypeCount { get; internal set; }
+      
+      private int _entityPosition = 0;
 
       public override string ToString() => _collectedTypes ?? string.Empty;
 

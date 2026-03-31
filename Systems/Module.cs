@@ -16,7 +16,7 @@ public class Module<T> : IModule<T>, IModule
             _buffer = new T[initialAmount];
             _sparseSet = new byte[initialAmount];
 
-            _sparseSet.AsSpan().Fill(0);
+            _sparseSet.AsSpan().Clear();
       }
 
       public void Toggle(uint index, byte toggle)

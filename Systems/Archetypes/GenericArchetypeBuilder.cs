@@ -11,7 +11,7 @@ public class ArchetypeBuilder : IArchetypeBuilder
       internal Type[] _types;
 
       private byte _typesCounted = 0;
-      private uint _cap;
+      private readonly uint _cap;
 
       public ArchetypeBuilder(int fixedCount, uint capacity)
       {
