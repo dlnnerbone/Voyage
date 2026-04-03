@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 using System.Collections;
 namespace Voyage.Operation;
 
-internal struct FastStack<T> : IEnumerable<T>
+public struct FastStack<T> : IEnumerable<T>
 {
     internal T[] _buffer = null!;
     internal int nextIndex = 0;
@@ -11,7 +11,7 @@ internal struct FastStack<T> : IEnumerable<T>
     internal readonly int Count => nextIndex + 1;
     internal readonly int BufferSize => _buffer.Length;
 
-    internal readonly ref T this[int index] => ref _buffer[index];
+    public readonly ref T this[int index] => ref _buffer[index];
 
     public FastStack() {}
 
@@ -25,13 +25,13 @@ internal struct FastStack<T> : IEnumerable<T>
         _buffer = _initialBuffer
     };
 
-    internal readonly Span<T> AsSpan() => _buffer.AsSpan(0, nextIndex);
+    public readonly Span<T> AsSpan() => _buffer.AsSpan(0, nextIndex);
 
     public readonly IEnumerator<T> GetEnumerator() => new FastStackEnumerator(this);
     readonly IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
     // methods
-    internal readonly ref T Peek() => ref _buffer[nextIndex];
+    internal readonly ref T Peek() => ref _buffer[nextIndex - 1];
     internal readonly ref T Peak() => ref _buffer[^1];
 
     internal void Push(T comp)
@@ -45,7 +45,7 @@ internal struct FastStack<T> : IEnumerable<T>
     internal T Pop()
     {
         var buf = _buffer;
-        T nextComp = buf[nextIndex--];
+        T nextComp = buf[--nextIndex];
 
         if (RuntimeServices.IsReferenceOrContainsReferences<T>())
         {

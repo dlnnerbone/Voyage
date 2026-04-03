@@ -6,13 +6,13 @@ public partial struct Entity
       internal ushort ArchetypeID;
       internal ushort Queue;
 
-      public ref struct EntityReader
+      public struct EntityReader
       {
             public readonly int EntityID;
             public readonly ushort ArchetypeID;
             public readonly ushort Queue;
 
-            public EntityReader(Entity entity)
+            public EntityReader(in Entity entity)
             {
                   EntityID = entity.EntityID;
                   ArchetypeID = entity.ArchetypeID;
@@ -22,5 +22,20 @@ public partial struct Entity
             public static EntityReader GetInfo(Entity entity) => new(entity);
       }
 
-      public EntityReader Read() => new(this);
+      public struct EntityLookup
+      {
+            public readonly ushort ArchetypeID;
+            public readonly ushort Queue;
+
+            public EntityLookup(in Entity entity)
+            {
+                  ArchetypeID = entity.ArchetypeID;
+                  Queue = entity.Queue;
+            }
+
+            public static EntityLookup GetLookup(in Entity ent) => new(ent);
+      }
+
+      public readonly EntityReader Read() => new(this);
+      public readonly EntityLookup GetEntityLookup() => new(this);
 }

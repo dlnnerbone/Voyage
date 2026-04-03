@@ -1,4 +1,5 @@
 using System.Collections.Immutable;
+using System.Runtime.CompilerServices;
 namespace Voyage.Operation;
 
 /// <summary>
@@ -7,19 +8,16 @@ namespace Voyage.Operation;
 public partial class Archetype
 {
       internal HashSet<Type> _typeSet;
-
       internal string _collectedTypes;
       internal object[] _dataMatrix;
       internal byte[] _indexMap;
+      internal FastStack<int> _entityMap;
       
       public ImmutableHashSet<Type> TypeSet => _typeSet.ToImmutableHashSet();
       public int ArchetypeID { get; internal set; }
       public int TypeCount { get; internal set; }
-      
-      private int _entityPosition = 0;
 
       public override string ToString() => _collectedTypes ?? string.Empty;
-
       public static Archetype Null => new();
 
       internal Archetype()
@@ -32,23 +30,11 @@ public partial class Archetype
             TypeCount = 0;
       }
 
-      public static Archetype Construct<TBuilder>(TBuilder builder) where TBuilder : IArchetypeBuilder
-      {
-            return builder.Return();
-      }
+      public static Archetype Construct<TBuilder>(TBuilder builder) where TBuilder : IArchetypeBuilder => builder.Return();
 
       public object this[int id] => _dataMatrix[id];
-
       public ImmutableArray<byte> IndexMap => _indexMap.ToImmutableArray();
 
-      /// <summary>
-      /// this method returns the desired module.
-      /// 
-      /// note: this method assumes the <see cref="_dataMatrix"> array  has Module elements.
-      /// </summary>
-      /// <typeparam name="T">the type to look for.</typeparam>
-      /// <returns>returns the module holding the specified type.</returns>
-      /// <exception cref="ArgumentOutOfRangeException">this exception is called when the Module types ID is not in the bounds of the array.</exception>
       public Module<T> GetModule<T>()
       {
             uint compID = ComponentMetadata<T>.ID;
@@ -62,5 +48,16 @@ public partial class Archetype
 
             return (Module<T>)_dataMatrix[indexToMod];
       }
+
+      // note: this method is Unsafe.
+      public Module<T> UnboxModule<T>()
+      {
+            uint compID = ComponentMetadata<T>.ID;
+
+            byte indexToMod = _indexMap[compID];
+            return Unsafe.As<Module<T>>(this[indexToMod]);
+      }
+
+      public override int GetHashCode() => HashCode.Combine(_typeSet, ArchetypeID, _collectedTypes, _indexMap, TypeCount);
 
 }

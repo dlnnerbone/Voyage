@@ -4,7 +4,7 @@ namespace Voyage.Helper;
 
 public static class RuntimeServices
 {
-
+    
     public static bool IsReference<T>()
     {
         return typeof(T).IsClass || typeof(T).IsArray;

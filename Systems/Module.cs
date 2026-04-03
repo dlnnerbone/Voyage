@@ -1,4 +1,6 @@
 using System.Collections.Immutable;
+using Voyage.Helper;
+using System.Runtime.CompilerServices;
 namespace Voyage.Operation;
 
 public class Module<T> : IModule<T>, IModule
@@ -10,7 +12,9 @@ public class Module<T> : IModule<T>, IModule
       public T[] GetBuffer() => _buffer;
       public ImmutableArray<byte> GetSparse() => _sparseSet.ToImmutableArray();
       public ImmutableArray<ushort> GetDense() => _denseSet.ToImmutableArray();
-
+      public ref T this[int id] => ref _buffer[id];
+      internal ref T GetAsUnsafe(int id) => ref Unsafe.AsRef(ref _buffer[id]);
+       
       internal Module(uint initialAmount)
       {
             _buffer = new T[initialAmount];
@@ -29,13 +33,11 @@ public class Module<T> : IModule<T>, IModule
             Refresh();
       }
 
-      public void ToggleSelection(IEnumerable<uint> indices, byte toggle)
+      public void ToggleSelection(uint[] indices, byte toggle)
       {
-            uint[] toArr = indices.ToArray();
-
-            for(int i = 0; i < toArr.Length; i++)
+            for(int i = 0; i < indices.Length; i++)
             {
-                  ref readonly var index = ref toArr[i];
+                  ref readonly var index = ref indices[i];
 
                   if (index > _sparseSet.Length - 1) throw new ArgumentOutOfRangeException($"{i} is out of bounds of the array.");
                   else if (_sparseSet[index] == toggle) continue;
@@ -43,6 +45,14 @@ public class Module<T> : IModule<T>, IModule
                   _sparseSet[i] = toggle;
             }
 
+            Refresh();
+      }
+
+      public void Resize(int newLength)
+      {
+            ArrayHelper<T>.CopyAndResize(ref _buffer, newLength);
+            ArrayHelper<byte>.CopyAndResize(ref _sparseSet, newLength);
+            
             Refresh();
       }
 

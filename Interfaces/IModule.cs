@@ -4,7 +4,7 @@ public interface IModule
 {
       public void Refresh();
       public void Toggle(uint index, byte toggle);
-      public void ToggleSelection(IEnumerable<uint> group, byte toggle);
+      public void ToggleSelection(uint[] group, byte toggle);
 }
 
 public interface IModule<T> : IModule
