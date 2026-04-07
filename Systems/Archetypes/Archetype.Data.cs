@@ -22,11 +22,4 @@ public partial class Archetype
     }
 
     // entity indicing
-
-    internal void Push(ref Entity entity)
-    {
-        ushort nextIndex = (ushort)_entityMap.nextIndex;
-        entity = new Entity(entity.EntityID, ArchetypeID, nextIndex);
-        _entityMap.Push(entity.EntityID);
-    }
 }

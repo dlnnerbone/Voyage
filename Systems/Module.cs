@@ -3,75 +3,112 @@ using Voyage.Helper;
 using System.Runtime.CompilerServices;
 namespace Voyage.Operation;
 
-public class Module<T> : IModule<T>, IModule
+public class Module<T> : IModule<T>, IEnumerable<T>
 {
       internal T[] _buffer;
-      internal ushort[] _denseSet = Array.Empty<ushort>();
+      internal ushort[] _denseSet = [];
       internal byte[] _sparseSet;
 
+      public ref T this[int index] => ref _buffer[index];
       public T[] GetBuffer() => _buffer;
-      public ImmutableArray<byte> GetSparse() => _sparseSet.ToImmutableArray();
-      public ImmutableArray<ushort> GetDense() => _denseSet.ToImmutableArray();
-      public ref T this[int id] => ref _buffer[id];
-      internal ref T GetAsUnsafe(int id) => ref Unsafe.AsRef(ref _buffer[id]);
-       
-      internal Module(uint initialAmount)
-      {
-            _buffer = new T[initialAmount];
-            _sparseSet = new byte[initialAmount];
+      public ushort[] GetDenseSet() => _denseSet;
+      public byte[] GetSparseSet() => _sparseSet;
 
-            _sparseSet.AsSpan().Clear();
+      public bool HasElements() => _buffer.Length > 0;
+      public int Length => _buffer.Length;
+
+      public Module(int initialCount)
+      {
+            _buffer = new T[initialCount];
+            _sparseSet = new byte[initialCount];
       }
 
-      public void Toggle(uint index, byte toggle)
+      public Module(T[] _initialBuffer)
       {
-            if (index > _buffer.Length - 1) throw new ArgumentOutOfRangeException($"{index} is out of bounds of array.");
-            else if (_sparseSet[index] == toggle) return;
-            // the above line checks if the byte is already toggled by the choice, and returns the method to prevent the code below
-            // from running every frame.
-            _sparseSet[index] = toggle;
-            Refresh();
+            _buffer = _initialBuffer;
+            _sparseSet = new byte[_buffer.Length];
       }
 
-      public void ToggleSelection(uint[] indices, byte toggle)
+      public void ToggleElement(ushort indexToElement, bool toggle)
+      {
+            if (indexToElement > Length - 1)
+            {
+                  throw new ArgumentOutOfRangeException($"{indexToElement} is out of bounds of buffer.");
+            }
+            
+            var convertValue = Convert.ToByte(toggle);
+            if (_sparseSet[indexToElement] != convertValue)
+            {
+                  _sparseSet[indexToElement] = convertValue;
+                  Refresh();
+            }
+      }
+
+      public void ToggleElementSelection(ushort[] indices, bool toggle)
       {
             for(int i = 0; i < indices.Length; i++)
             {
-                  ref readonly var index = ref indices[i];
+                  if (indices[i] > Length - 1) throw new ArgumentOutOfRangeException($"at index {i}, {indices[i]}, is out of bounds.");
 
-                  if (index > _sparseSet.Length - 1) throw new ArgumentOutOfRangeException($"{i} is out of bounds of the array.");
-                  else if (_sparseSet[index] == toggle) continue;
-
-                  _sparseSet[i] = toggle;
+                  _sparseSet[indices[i]] = Convert.ToByte(toggle);
             }
-
             Refresh();
       }
 
-      public void Resize(int newLength)
-      {
-            ArrayHelper<T>.CopyAndResize(ref _buffer, newLength);
-            ArrayHelper<byte>.CopyAndResize(ref _sparseSet, newLength);
-            
-            Refresh();
-      }
-
-      // despite this being public, let the Module (or archetype) handle it.
       public void Refresh()
       {
-            uint length = 0;
-            for(int i = 0; i < _buffer.Length; i++)
+            uint amountOfValid = 0;
+
+            // this loop reads the array and increments the above field as it passes by bytes with values of 1.
+            for(int i = 0; i < _sparseSet.Length; i++)
             {
-                  if (_sparseSet[i] == 1) ++length;
+                  ref readonly byte index = ref _sparseSet[i];
+                  if (index == 1) ++amountOfValid;
             }
 
-            _denseSet = new ushort[length];
-            uint tracker = 0;
-            for(ushort i = 0; i < _buffer.Length; i++)
+            _denseSet = new ushort[amountOfValid];
+            ushort indexTracker = 0;
+            for(ushort i = 0; i < _sparseSet.Length; i++)
             {
-                  if (_sparseSet[i] == 1) _denseSet[tracker++] = i;
+                   ref readonly byte indexValue = ref _sparseSet[i];
+                   if (indexValue == 1) _denseSet[indexTracker++] = i; 
             }
       }
 
-      public static Module<T> Create(uint initialAmount) => new Module<T>(initialAmount);
+      // resizing module.
+      internal void ResizeModule(int newLength)
+      {
+            T[] newBuffer = new T[newLength];
+            byte[] newSparseBuffer = new byte[newLength];
+            int previousLength = this.Length;
+            
+            int min = Math.Min(Length, newLength);
+
+            for(int i = 0; i < min; i++)
+            {
+                  ref readonly T element = ref _buffer[i];
+                  ref readonly byte indexValue = ref _sparseSet[i];
+
+                  newBuffer[i] = element;
+                  newSparseBuffer[i] = indexValue;
+            }
+
+            _sparseSet = newSparseBuffer;
+            _buffer = newBuffer;
+
+            if (min < previousLength) Refresh();
+      }
+
+      // enumeration
+
+      public IEnumerator<T> GetEnumerator()
+      {
+            for(int i = 0; i < _denseSet.Length; i++)
+            {
+                  yield return _buffer[_denseSet[i]];
+            }
+      }
+
+      System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() => GetEnumerator();
+
 }

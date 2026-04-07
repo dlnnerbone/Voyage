@@ -11,9 +11,9 @@ public class ArchetypeBuilder : IArchetypeBuilder
       internal Type[] _types;
 
       private byte _typesCounted = 0;
-      private readonly uint _cap;
+      private readonly int _cap;
 
-      public ArchetypeBuilder(int fixedCount, uint capacity)
+      public ArchetypeBuilder(int fixedCount, int capacity)
       {
             _archetype.TypeCount = fixedCount;
             _modules = new object[fixedCount];
