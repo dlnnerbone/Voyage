@@ -16,6 +16,7 @@ public partial class Archetype
       public ImmutableHashSet<Type> TypeSet => _typeSet.ToImmutableHashSet();
       public ushort ArchetypeID { get; internal set; }
       public int TypeCount { get; internal set; }
+      internal int _entityPosition = 0;
 
       public override string ToString() => _collectedTypes ?? string.Empty;
       public static Archetype Null => new();
@@ -30,7 +31,11 @@ public partial class Archetype
             TypeCount = 0;
       }
 
-      public static Archetype Construct<TBuilder>(TBuilder builder) where TBuilder : IArchetypeBuilder => builder.Return();
+      public static Archetype Construct<TBuilder>(TBuilder builder) where TBuilder : IArchetypeBuilder
+      {
+            Archetype arch = builder.Return();
+            return arch;
+      }
 
       public object this[int id] => _dataMatrix[id];
       public ImmutableArray<byte> IndexMap => _indexMap.ToImmutableArray();

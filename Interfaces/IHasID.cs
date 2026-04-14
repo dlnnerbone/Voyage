@@ -12,7 +12,6 @@ public interface IHasID<TReturn> : IHasID where TReturn : struct
       public new TReturn GetID();
 }
 
-
 /// <summary>
 /// non-generic interface for classes holding an ID.
 /// </summary>

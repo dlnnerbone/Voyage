@@ -92,10 +92,9 @@ public class Module<T> : IModule<T>, IEnumerable<T>
             for(int i = 0; i < min; i++)
             {
                   ref readonly T element = ref _buffer[i];
-                  ref readonly byte indexValue = ref _sparseSet[i];
 
                   newBuffer[i] = element;
-                  newSparseBuffer[i] = indexValue;
+                  newSparseBuffer[i] = _sparseSet[i];
             }
 
             _sparseSet = newSparseBuffer;

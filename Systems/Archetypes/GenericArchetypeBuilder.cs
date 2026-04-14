@@ -13,6 +13,8 @@ public class ArchetypeBuilder : IArchetypeBuilder
       private byte _typesCounted = 0;
       private readonly int _cap;
 
+      public int GetCapacityCount() => _cap;
+
       public ArchetypeBuilder(int fixedCount, int capacity)
       {
             _archetype.TypeCount = fixedCount;
