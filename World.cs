@@ -1,7 +1,7 @@
 using Voyage.Operation;
 namespace Voyage;
 
-public class World : IUpdatable
+public class World
 {
     internal readonly Query _query;
     internal readonly FastStack<Entity> _entities;
@@ -31,16 +31,6 @@ public class World : IUpdatable
     public Entity.EntityReader ReadEntity(int index) => _entities[index].Read();
     public Entity.EntityLookup LookupEntity(int index) => _entities[index].GetEntityLookup();
 
-    public void Update()
-    {
-        int len = _query._archetypes.Count;
-        for(int i = 0; i < len; i++)
-        {
-            if (_query[i].GetID() == 0) continue;
-            _query._archetypes[i].Update();
-        }
-    }
-
     public ushort CreateEntity(Archetype archetype)
     {
         ushort index = _entities.Push(Entity.Null);
@@ -50,6 +40,16 @@ public class World : IUpdatable
         return index;
     }
 
+    public ushort CreateEntity()
+    {
+        ushort index = _entities.Push(Entity.Null);
+        _entities[index].EntityID = index;
+
+        return index;
+    }
+
     public ushort ConstructArchetype<TBuilder>(TBuilder builder) where TBuilder : IArchetypeBuilder => _query.CreateArchetype(builder); 
     public ushort ConstructArchetype(ArchetypeBuilder builder) => _query.CreateArchetype(builder);
+
+
 }

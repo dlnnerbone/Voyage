@@ -1,6 +1,7 @@
 using System.Collections.Immutable;
 using Voyage.Helper;
 using System.Runtime.CompilerServices;
+using System.Collections;
 namespace Voyage.Operation;
 
 public class Module<T> : IModule<T>, IEnumerable<T>
@@ -123,16 +124,38 @@ public class Module<T> : IModule<T>, IEnumerable<T>
 
             if (min < previousLength) Refresh();
       }
-      // enumeration
 
-      public IEnumerator<T> GetEnumerator()
+      public ModuleEnumerator GetEnumerator() => new ModuleEnumerator(this);
+      IEnumerator<T> IEnumerable<T>.GetEnumerator() => GetEnumerator();
+      IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+      public struct ModuleEnumerator : IEnumerator<T>
       {
-            for(int i = 0; i < _buffer.Length; i++)
-            {
-                  yield return _buffer[i];
-            }
-      }
+            internal Module<T> module;
+            internal ushort[] _denseSet;
+            internal int denseLength;
+            internal int position = -1;
 
-      System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() => GetEnumerator();
+            internal ModuleEnumerator(Module<T> module)
+            {
+                  this.module = module;
+                  _denseSet = module.GetDenseSet();
+                  denseLength = module._denseSet.Length - 1;
+                  position = -1;
+            }
+
+            public void Reset() => position = -1;
+            public bool MoveNext() => ++position > denseLength;
+            public void Dispose()
+            {
+                  module = null!;
+                  _denseSet = null!;
+                  denseLength = 0;
+                  position = -1;
+            }
+
+            public readonly T Current => module[_denseSet[position]];
+            readonly object IEnumerator.Current => Current!; 
+      }
 
 }

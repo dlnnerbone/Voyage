@@ -12,16 +12,12 @@ public partial class Archetype
       internal object[] _dataMatrix;
       internal byte[] _indexMap;
       internal int[] _entityMap;
-
-      // delegates
-      public delegate void UpdateAction<T>(ref T component);
       
       public ImmutableHashSet<Type> TypeSet => _typeSet.ToImmutableHashSet();
       public ushort ArchetypeID { get; internal set; }
       public int TypeCount { get; internal set; }
       internal ushort _entityPosition = 0;
       public int Capacity { get; internal set; } = 0;
-      internal Action<int> _archetypeAction = (index) => { return; };
       internal Action<int> _archetypeResizer;
 
       public override string ToString() => _collectedTypes ?? string.Empty;

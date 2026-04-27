@@ -11,5 +11,4 @@ public static class ArchetypeMaster
 
     public static ref ushort AttainPosition(Archetype archetype) => ref archetype._entityPosition;
     public static ref Action<int> AttainResizer(Archetype archetype) => ref archetype._archetypeResizer;
-    public static ref Action<int> AttainUpdater(Archetype archetype) => ref archetype._archetypeAction;
 }
