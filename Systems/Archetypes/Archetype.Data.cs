@@ -1,4 +1,5 @@
 using System.Runtime.CompilerServices;
+using Voyage.Helper;
 namespace Voyage.Operation;
 
 public partial class Archetype : IHasID<ushort>
@@ -28,19 +29,14 @@ public partial class Archetype : IHasID<ushort>
 
     public void Increment(ref Entity entity)
     {
-        var index = _entityPosition++;
         
-        if (entity.IsNull()) throw new ArgumentException($"entity is 'null' and cannot be incremented.");
-        else if (index > Capacity - 1) ResizeModules(Capacity * 2);
-
-        _entityMap[index] = entity.EntityID;
-        entity = new Entity(entity.EntityID, ArchetypeID, index);
     }
 
     public void ResizeModules(int newLength)
     {
         Capacity = newLength;
         _archetypeResizer(newLength);
+        ArrayHelper<int>.CopyAndResize(ref _entityMap, Capacity);
     }
 
     public Entity GetEntity(World world, int entityMapIndex) => world._entities[_entityMap[entityMapIndex]];

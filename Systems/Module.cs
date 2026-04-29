@@ -125,7 +125,7 @@ public class Module<T> : IModule<T>, IEnumerable<T>
             if (min < previousLength) Refresh();
       }
 
-      public ModuleEnumerator GetEnumerator() => new ModuleEnumerator(this);
+      public ModuleEnumerator GetEnumerator() => new(this);
       IEnumerator<T> IEnumerable<T>.GetEnumerator() => GetEnumerator();
       IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
@@ -140,17 +140,17 @@ public class Module<T> : IModule<T>, IEnumerable<T>
             {
                   this.module = module;
                   _denseSet = module.GetDenseSet();
-                  denseLength = module._denseSet.Length - 1;
+                  denseLength = module._denseSet.Length;
                   position = -1;
             }
 
             public void Reset() => position = -1;
-            public bool MoveNext() => ++position > denseLength;
+            public bool MoveNext() => ++position < denseLength;
             public void Dispose()
             {
                   module = null!;
                   _denseSet = null!;
-                  denseLength = 0;
+                  denseLength = -1;
                   position = -1;
             }
 

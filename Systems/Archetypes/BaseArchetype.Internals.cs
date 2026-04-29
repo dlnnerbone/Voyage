@@ -10,8 +10,8 @@ public partial class Archetype
       internal HashSet<Type> _typeSet;
       internal string _collectedTypes;
       internal object[] _dataMatrix;
-      internal byte[] _indexMap;
-      internal int[] _entityMap;
+      internal byte[] _indexMap; // index map for components
+      internal int[] _entityMap; // index map for entities from worlds
       
       public ImmutableHashSet<Type> TypeSet => _typeSet.ToImmutableHashSet();
       public ushort ArchetypeID { get; internal set; }

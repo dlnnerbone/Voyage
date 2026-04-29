@@ -75,11 +75,12 @@ public struct FastStack<T> : IEnumerable<T>
         int iterator = -1;
         readonly int max;
 
-        readonly T IEnumerator<T>.Current => buffer[iterator];
-        public bool MoveNext() => ++iterator > max;
+        public bool MoveNext() => ++iterator < max;
         public void Reset() => iterator = -1;
-        public readonly object Current => Current;
         public void Dispose() => buffer = null!;
+
+        public readonly T Current => buffer[iterator];
+        readonly object IEnumerator.Current => Current!;
 
         internal FastStackEnumerator(in FastStack<T> stack)
         {
