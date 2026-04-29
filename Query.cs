@@ -4,6 +4,7 @@ namespace Voyage;
 public class Query
 {
     internal readonly World _world;
+
     internal readonly FastStack<Archetype> _archetypes;
     internal Archetype this[int index] => _archetypes[index];
 
@@ -19,19 +20,20 @@ public class Query
         _archetypes = FastStack<Archetype>.Create(initArchetypeCount);
     }
 
-    public ushort CreateArchetype<TBuilder>(TBuilder builder) where TBuilder : IArchetypeBuilder
+    public Archetype ConstructArchetype<TBuilder>(TBuilder builder) where TBuilder : IArchetypeBuilder
     {
-        ushort val = _archetypes.Push(builder.Return());
-        _archetypes[val].ArchetypeID = val;
-        return val;
+        var indexToArch = _archetypes.Push(builder.Return());
+        var arch = _archetypes[indexToArch];
+        arch.ArchetypeID = indexToArch;
+        return arch;
     }
 
-    public ushort CreateArchetype(ArchetypeBuilder builder)
+    public Archetype ConstructArchetype(ArchetypeBuilder builder)
     {
-        ushort val = _archetypes.Push(builder.Return());
-        _archetypes[val].ArchetypeID = val;
-        return val;
+        var indexToArch = _archetypes.Push(builder.Return());
+        var arch = _archetypes[indexToArch];
+        arch.ArchetypeID = indexToArch;
+        return arch;
     }
-
     
 }
