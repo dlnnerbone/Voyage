@@ -1,11 +1,12 @@
 using System.Collections.Immutable;
 using System.Runtime.CompilerServices;
+using Voyage;
 namespace Voyage.Operation;
 
 /// <summary>
 /// the Archetype class for storing components. initialization requires an archetype builder or null.
 /// </summary>
-public partial class Archetype
+public partial class Archetype : INull
 {
       internal HashSet<Type> _typeSet;
       internal string _collectedTypes;
@@ -14,7 +15,7 @@ public partial class Archetype
       internal int[] _entityMap; // index map for entities from worlds
       
       public ImmutableHashSet<Type> TypeSet => _typeSet.ToImmutableHashSet();
-      public ushort ArchetypeID { get; internal set; }
+      public int ArchetypeID { get; internal set; }
       public int TypeCount { get; internal set; }
       internal ushort _entityPosition = 0;
       public int Capacity { get; internal set; } = 0;
@@ -22,6 +23,7 @@ public partial class Archetype
 
       public override string ToString() => _collectedTypes ?? string.Empty;
       public static Archetype Null => new();
+      public bool IsNull() => ArchetypeID == -1;
 
       internal Archetype()
       {
@@ -30,7 +32,7 @@ public partial class Archetype
             _dataMatrix = null!;
             _indexMap = null!;
             _typeSet = null!;
-            ArchetypeID = 0;
+            ArchetypeID = -1;
             TypeCount = 0;
             _archetypeResizer = null!;
       }

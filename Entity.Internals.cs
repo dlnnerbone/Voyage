@@ -1,6 +1,6 @@
 namespace Voyage;
 
-public partial struct Entity
+public partial struct Entity : INull
 {
       internal int EntityID;
       internal ushort ArchetypeID;
@@ -12,7 +12,7 @@ public partial struct Entity
             public readonly ushort ArchetypeID;
             public readonly ushort Queue;
 
-            public EntityReader(in Entity entity)
+            public EntityReader(Entity entity)
             {
                   EntityID = entity.EntityID;
                   ArchetypeID = entity.ArchetypeID;
@@ -27,7 +27,7 @@ public partial struct Entity
             public readonly ushort ArchetypeID;
             public readonly ushort Queue;
 
-            public EntityLookup(in Entity entity)
+            public EntityLookup(Entity entity)
             {
                   ArchetypeID = entity.ArchetypeID;
                   Queue = entity.Queue;

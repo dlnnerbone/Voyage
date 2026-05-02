@@ -2,7 +2,7 @@ using System.Runtime.CompilerServices;
 using Voyage.Helper;
 namespace Voyage.Operation;
 
-public partial class Archetype : IHasID<ushort>
+public partial class Archetype : IHasID<int>
 {
     public ref TComp GetComponent<TComp>(int columnIndex)
     {
@@ -22,15 +22,20 @@ public partial class Archetype : IHasID<ushort>
         return ref Unsafe.AsRef(ref module[columnIndex]);
     }
 
-    public ushort GetID() => ArchetypeID;
+    public int GetID() => ArchetypeID;
     object IHasID.GetID() => GetID();
 
-    // entity indicing
-
-    public void Increment(ref Entity entity)
+    internal Entity Add(int id)
     {
-        
+        if (IsNull()) throw new ArgumentException("can not increment an entity into an archetype that's null."); 
+        else if (Capacity == 0) ResizeModules(4);
+        ushort queue = _entityPosition++;
+        if (queue > Capacity - 1) ResizeModules(Capacity * 2);
+        _entityMap[queue] = id;
+        return new Entity(id, (ushort)ArchetypeID, queue);
     }
+
+    // entity indicing
 
     public void ResizeModules(int newLength)
     {

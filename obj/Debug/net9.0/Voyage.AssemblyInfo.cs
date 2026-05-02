@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyDescriptionAttribute("A hobbyist, experimental Entity Framework.")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+16f1db9d21a0e02b0dcb66eede18a0874166ecbe")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+67cbf7ae3c64a299774ead3724a77154f000838d")]
 [assembly: System.Reflection.AssemblyProductAttribute("Voyage")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Voyage")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

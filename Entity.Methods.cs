@@ -20,7 +20,7 @@ public partial struct Entity : IHasID<int>, IEquatable<Entity>
       }
 
       // creates a 'null' entity (no archetype or position)
-      public static Entity Null => new Entity(-1, 0, 0);
+      public static Entity Null => new(-1, 0, 0);
 
       public readonly int GetID() => EntityID;
       readonly object IHasID.GetID() => EntityID;

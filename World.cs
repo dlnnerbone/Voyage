@@ -1,7 +1,7 @@
 using Voyage.Operation;
 namespace Voyage;
 
-public class World : IHasID<int>
+public class World : IHasID<int>, IUpdatable
 {
     internal readonly Query _query;
     internal readonly FastStack<Entity> _entities;
@@ -38,4 +38,20 @@ public class World : IHasID<int>
     public Archetype ConstructArchetype<TBuilder>(TBuilder builder) where TBuilder : IArchetypeBuilder => _query.ConstructArchetype(builder); 
     public Archetype ConstructArchetype(ArchetypeBuilder builder) => _query.ConstructArchetype(builder);
 
+    public int CreateEntity()
+    {
+        var index = _entities.Push(Entity.Null);
+        _entities[index] = new Entity(index, 0, 0);
+        return index;
+    }
+
+    public int CreateEntity(Archetype arch)
+    {
+        if (arch.IsNull() || arch == null) throw new ArgumentException($"Archetype can not be 'null'");
+        var index = _entities.Push(Entity.Null);
+        _entities[index] = arch.Add(index);
+        return index;
+    }
+
+    public void Update() {}
 }

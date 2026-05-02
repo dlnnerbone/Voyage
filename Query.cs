@@ -22,17 +22,17 @@ public class Query
 
     public Archetype ConstructArchetype<TBuilder>(TBuilder builder) where TBuilder : IArchetypeBuilder
     {
-        var indexToArch = _archetypes.Push(builder.Return());
-        var arch = _archetypes[indexToArch];
-        arch.ArchetypeID = indexToArch;
+        var arch = Archetype.Construct(builder);
+        var archID = _archetypes.Push(arch);
+        arch.ArchetypeID = archID;
         return arch;
     }
 
     public Archetype ConstructArchetype(ArchetypeBuilder builder)
     {
-        var indexToArch = _archetypes.Push(builder.Return());
-        var arch = _archetypes[indexToArch];
-        arch.ArchetypeID = indexToArch;
+        var arch = Archetype.Construct(builder);
+        var archID = _archetypes.Push(arch);
+        arch.ArchetypeID = archID;
         return arch;
     }
     
