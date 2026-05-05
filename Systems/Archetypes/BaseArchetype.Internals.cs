@@ -37,19 +37,8 @@ public partial class Archetype : INull
             _archetypeResizer = null!;
       }
 
-      public static Archetype Construct<TBuilder>(TBuilder builder) where TBuilder : IArchetypeBuilder
-      {
-            Archetype arch = builder.Return();
-            arch.Capacity = builder.GetCapacityCount();
-            return arch;
-      }
-
-      public static Archetype Construct(ArchetypeBuilder builder)
-      {
-            Archetype arch = builder.Return();
-            arch.Capacity = builder.GetCapacityCount();
-            return arch;
-      }
+      public static Archetype Construct<TBuilder>(TBuilder builder) where TBuilder : IArchetypeBuilder => builder.Return();
+      public static Archetype Construct(ArchetypeBuilder builder) => builder.Return();
 
       public object this[int id] => _dataMatrix[id];
       public ImmutableArray<byte> IndexMap => _indexMap.ToImmutableArray();

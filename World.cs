@@ -1,7 +1,7 @@
 using Voyage.Operation;
 namespace Voyage;
 
-public class World : IHasID<int>, IUpdatable
+public class World : IHasID<int>
 {
     internal readonly Query _query;
     internal readonly FastStack<Entity> _entities;
@@ -53,5 +53,10 @@ public class World : IHasID<int>, IUpdatable
         return index;
     }
 
-    public void Update() {}
+    public ref TComp GetComponent<TComp>(int entityID)
+    {
+        Entity.EntityLookup lookup = _entities[entityID];
+        var arch = _query[lookup.ArchetypeID];
+        return ref arch.GetComponent<TComp>(lookup.Queue);
+    }
 }

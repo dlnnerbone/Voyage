@@ -12,17 +12,14 @@ public class ArchetypeBuilder : IArchetypeBuilder
       private Action<int> _resizer;
 
       private byte _typesCounted = 0;
-      private readonly int _cap;
-
-      public int GetCapacityCount() => _cap;
 
       public ArchetypeBuilder(int fixedCount, int capacity)
       {
             _archetype.TypeCount = fixedCount;
+            _archetype.Capacity = capacity;
+
             _modules = new object[fixedCount];
             _types = new Type[fixedCount];
-
-            _cap = capacity;
             _resizer = (length) => {};
       }
 
@@ -42,7 +39,7 @@ public class ArchetypeBuilder : IArchetypeBuilder
 
             _types[curIndex] = typeOfGeneric;
             _indexMap[compID] = curIndex;
-            _modules[curIndex] = new Module<T>(_cap);
+            _modules[curIndex] = new Module<T>(_archetype.Capacity);
 
             var mod = (Module<T>)_modules[curIndex];
             _resizer += mod.ResizeModule;
@@ -56,7 +53,7 @@ public class ArchetypeBuilder : IArchetypeBuilder
             _archetype._dataMatrix = _modules;
             _archetype._collectedTypes = string.Join(", ", _archetype._typeSet);
             _archetype._indexMap = _indexMap;
-            _archetype._entityMap = new int[_cap];
+            _archetype._entityMap = new int[_archetype.Capacity];
             _archetype._archetypeResizer = _resizer;
             return this;
       }

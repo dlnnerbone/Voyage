@@ -38,4 +38,7 @@ public partial struct Entity : INull
 
       public readonly EntityReader Read() => new(this);
       public readonly EntityLookup GetEntityLookup() => new(this);
+
+      public static implicit operator EntityReader(Entity ent) => ent.Read();
+      public static implicit operator EntityLookup(Entity ent) => ent.GetEntityLookup();
 }

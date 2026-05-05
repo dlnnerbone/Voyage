@@ -11,6 +11,8 @@ public class Module<T> : IModule<T>, IEnumerable<T>
       internal byte[] _sparseSet;
 
       public ref T this[int index] => ref _buffer[index];
+      public ref T AttainByQueue(int index) => ref _buffer[_denseSet[index]];
+      
       public T[] GetBuffer() => _buffer;
       public ushort[] GetDenseSet() => _denseSet;
       public byte[] GetSparseSet() => _sparseSet;

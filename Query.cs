@@ -22,7 +22,7 @@ public class Query
 
     public Archetype ConstructArchetype<TBuilder>(TBuilder builder) where TBuilder : IArchetypeBuilder
     {
-        var arch = Archetype.Construct(builder);
+        var arch = builder.Return();
         var archID = _archetypes.Push(arch);
         arch.ArchetypeID = archID;
         return arch;
@@ -30,7 +30,7 @@ public class Query
 
     public Archetype ConstructArchetype(ArchetypeBuilder builder)
     {
-        var arch = Archetype.Construct(builder);
+        var arch = builder.Return();
         var archID = _archetypes.Push(arch);
         arch.ArchetypeID = archID;
         return arch;
