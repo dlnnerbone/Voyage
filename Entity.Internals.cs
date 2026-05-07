@@ -1,44 +1,34 @@
 namespace Voyage;
 
-public partial struct Entity : INull
+public partial struct Entity : INull, IHasID<int>
 {
-      internal int EntityID;
+      internal int ID;
       internal ushort ArchetypeID;
       internal ushort Queue;
 
-      public readonly struct EntityReader
+      public Entity() {}
+
+      internal Entity(int id, ushort archID, ushort queuePos)
       {
-            public readonly int EntityID;
-            public readonly ushort ArchetypeID;
-            public readonly ushort Queue;
-
-            public EntityReader(Entity entity)
-            {
-                  EntityID = entity.EntityID;
-                  ArchetypeID = entity.ArchetypeID;
-                  Queue = entity.Queue;
-            }
-
-            public static EntityReader GetInfo(Entity entity) => new(entity);
+            ID = id;
+            ArchetypeID = archID;
+            Queue = queuePos;
       }
 
-      public readonly struct EntityLookup
+      public readonly struct Reader(in Entity entity)
       {
-            public readonly ushort ArchetypeID;
-            public readonly ushort Queue;
+            public readonly int ID = entity.ID;
+            public readonly ushort ArchetypeID = entity.ArchetypeID;
+            public readonly ushort Queue = entity.Queue;
 
-            public EntityLookup(Entity entity)
-            {
-                  ArchetypeID = entity.ArchetypeID;
-                  Queue = entity.Queue;
-            }
-
-            public static EntityLookup GetLookup(in Entity ent) => new(ent);
+            public static Reader GetInfo(Entity entity) => new(entity);
       }
 
-      public readonly EntityReader Read() => new(this);
-      public readonly EntityLookup GetEntityLookup() => new(this);
+      public readonly Reader Read() => new(this);
+      public static Entity Null => new(-1, 0, 0);
 
-      public static implicit operator EntityReader(Entity ent) => ent.Read();
-      public static implicit operator EntityLookup(Entity ent) => ent.GetEntityLookup();
+      public readonly int GetID() => ID;
+      readonly object IHasID.GetID() => GetID();
+
+      public static implicit operator Reader(Entity ent) => ent.Read();
 }

@@ -1,39 +1,34 @@
 using Voyage.Operation;
 namespace Voyage;
 
-public class World : IHasID<int>
+public class World
 {
     internal readonly Query _query;
     internal readonly FastStack<Entity> _entities;
-    
-    public readonly int WorldID;
 
     public Entity this[int index] => _entities[index];
     
     public Archetype GetArchetype(Entity entity) => _query[entity.ArchetypeID];
-    public Archetype GetArchetype(Entity.EntityLookup lookup) => _query[lookup.ArchetypeID];
-    public Archetype GetArchetype(Entity.EntityReader reader) => _query[reader.ArchetypeID];
+    public Archetype GetArchetype(Entity.Reader reader) => _query[reader.ArchetypeID];
     public Archetype GetArchetype(int archetypeID) => _query[archetypeID];
 
-    public int GetID() => WorldID;
-    object IHasID.GetID() => GetID();
-
-    public World(int worldID)
+    public World()
     {
-        WorldID = worldID;
+        if (!PrimaryWorld.IsNull()) throw new ArgumentException($"can not have more than one world initialized.");
         _query = new(this);
         _entities = FastStack<Entity>.Create(4);
+        PrimaryWorld._world = this;
     }
 
-    public World(int worldID, int entityInitLength)
+    public World(int entityInitLength)
     {
-        WorldID = worldID;
+        if (!PrimaryWorld.IsNull()) throw new ArgumentException($"can not have more than one world initialized.");
         _query = new(this);
         _entities = FastStack<Entity>.Create(entityInitLength);
+        PrimaryWorld._world = this;
     }
 
-    public Entity.EntityReader ReadEntity(int index) => _entities[index].Read();
-    public Entity.EntityLookup LookupEntity(int index) => _entities[index].GetEntityLookup();
+    public Entity.Reader ReadEntity(int index) => _entities[index].Read();
 
     public Archetype ConstructArchetype<TBuilder>(TBuilder builder) where TBuilder : IArchetypeBuilder => _query.ConstructArchetype(builder); 
     public Archetype ConstructArchetype(ArchetypeBuilder builder) => _query.ConstructArchetype(builder);
@@ -49,14 +44,14 @@ public class World : IHasID<int>
     {
         if (arch.IsNull() || arch == null) throw new ArgumentException($"Archetype can not be 'null'");
         var index = _entities.Push(Entity.Null);
-        _entities[index] = arch.Add(index);
+        arch.AddEntity(ref _entities[index]);
         return index;
     }
 
     public ref TComp GetComponent<TComp>(int entityID)
     {
-        Entity.EntityLookup lookup = _entities[entityID];
-        var arch = _query[lookup.ArchetypeID];
-        return ref arch.GetComponent<TComp>(lookup.Queue);
+        var entity = this[entityID];
+        var arch = _query[entity.ArchetypeID];
+        return ref arch.GetComponent<TComp>(entity.Queue);
     }
 }

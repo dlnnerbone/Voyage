@@ -12,12 +12,14 @@ public class Query
     {
         _world = world;
         _archetypes = FastStack<Archetype>.Create(4);
+        _archetypes.Push(Archetype.Null);
     }
 
     internal Query(World world, int initArchetypeCount)
     {
         _world = world;
         _archetypes = FastStack<Archetype>.Create(initArchetypeCount);
+        _archetypes.Push(Archetype.Null);
     }
 
     public Archetype ConstructArchetype<TBuilder>(TBuilder builder) where TBuilder : IArchetypeBuilder
@@ -35,5 +37,7 @@ public class Query
         arch.ArchetypeID = archID;
         return arch;
     }
+
+    public ushort CreateNullArchetype() => _archetypes.Push(Archetype.Null); 
     
 }

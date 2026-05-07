@@ -15,7 +15,7 @@ public partial class Archetype : INull
       internal int[] _entityMap; // index map for entities from worlds
       
       public ImmutableHashSet<Type> TypeSet => _typeSet.ToImmutableHashSet();
-      public int ArchetypeID { get; internal set; }
+      public ushort ArchetypeID { get; internal set; }
       public int TypeCount { get; internal set; }
       internal ushort _entityPosition = 0;
       public int Capacity { get; internal set; } = 0;
@@ -23,7 +23,7 @@ public partial class Archetype : INull
 
       public override string ToString() => _collectedTypes ?? string.Empty;
       public static Archetype Null => new();
-      public bool IsNull() => ArchetypeID == -1;
+      public bool IsNull() => ArchetypeID == 0;
 
       internal Archetype()
       {
@@ -32,7 +32,7 @@ public partial class Archetype : INull
             _dataMatrix = null!;
             _indexMap = null!;
             _typeSet = null!;
-            ArchetypeID = -1;
+            ArchetypeID = 0;
             TypeCount = 0;
             _archetypeResizer = null!;
       }
