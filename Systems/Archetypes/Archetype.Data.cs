@@ -27,15 +27,12 @@ public partial class Archetype : IHasID<int>
 
     // entity indicing
 
-    internal void AddEntity(ref Entity ent)
+    internal ushort MoveNext()
     {
-        if (ent.IsNull() || this.IsNull()) throw new ArgumentException("can not add an entity that is null or an entity into a 'null' archetype.");
-        else if (Capacity == 0) ResizeModules(4);
+        if (Capacity == 0) ResizeModules(8);
         else if (_entityPosition > Capacity - 1) ResizeModules(Capacity * 2);
 
-        var queuePos = _entityPosition++;
-        _entityMap[queuePos] = ent.ID;
-        ent = new(ent.ID, ArchetypeID, queuePos);
+        return _entityPosition++;
     }
 
     public void ResizeModules(int newLength)
@@ -46,5 +43,4 @@ public partial class Archetype : IHasID<int>
     }
 
     public Entity GetEntity(World world, int entityMapIndex) => world._entities[_entityMap[entityMapIndex]];
-    public Entity GetEntity(int entityMapIndex) => PrimaryWorld._world[_entityMap[entityMapIndex]];
 }

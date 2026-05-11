@@ -3,16 +3,20 @@ namespace Voyage;
 
 public partial struct Entity : IEquatable<Entity>
 {
-      public override readonly int GetHashCode() => HashCode.Combine(ArchetypeID, Queue);
-      public readonly bool IsNull() => ArchetypeID == 0;
+      public override readonly int GetHashCode() => ID + ArchetypeID + Queue;
+      public readonly bool IsNull() => ID == 0;
       public static bool IsNull(Entity entity) => entity.IsNull();
 
-      public ref TComp Get<TComp>()
+      public readonly ref TComp Get<TComp>(World world)
       {
-            var arch = PrimaryWorld._world._query[ArchetypeID];
+            if (IsNull()) throw new NullReferenceException($"Entity that is 'null' can not be used to attain a component by reference.");
+            
+            Archetype arch = world.GetArchetype(ArchetypeID);
+            
+            if (arch.IsNull()) throw new NullReferenceException($"Getting an archetype that is 'null' is invalid.");
+
             return ref arch.GetComponent<TComp>(Queue);
       }
-
       // operators
 
       public readonly bool Equals(Entity other) 
@@ -23,5 +27,10 @@ public partial struct Entity : IEquatable<Entity>
       }
 
       public static bool Equals(Entity main, Entity other) => main.Equals(other);
-      
+
+      public readonly override string ToString() => $"ID: {ID}, Archetype: {ArchetypeID}, Position: {Queue}";
+
+      internal void SetID(int newID) => ID = newID;
+      internal void SetArch(ushort archID) => ArchetypeID = archID;
+      internal void SetQueue(ushort newQueue) => Queue = newQueue;
 }
