@@ -6,9 +6,9 @@ namespace Voyage.Operation;
 
 public class Module<T> : IModule<T>, IEnumerable<T>
 {
-      internal T[] _buffer;
+      internal T[] _buffer = [];
       internal ushort[] _denseSet = [];
-      internal byte[] _sparseSet;
+      internal byte[] _sparseSet = [];
 
       public ref T this[int index] => ref _buffer[index];
       public ref T AttainByQueue(int index) => ref _buffer[_denseSet[index]];
