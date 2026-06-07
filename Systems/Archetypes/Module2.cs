@@ -2,17 +2,17 @@ using System.Runtime.CompilerServices;
 using System.Collections.Immutable;
 namespace Voyage.Operation;
 
-public class Module2<T> : IModule<T>
+public class Module<T> : IModule<T>
 {
     // an array of the chosen components.
-    private T[] _compBuffer;
+    internal T[] _compBuffer;
     // Sparse Set values are used to access dense set indices
-    private int[] _activeComponentsSparse = [];
+    internal int[] _activeComponentsSparse = [];
     // dense set that access active components
-    private int[] _activeComponentsDense = [];
+    internal int[] _activeComponentsDense = [];
     // hat components are active.
-    private bool[] _activatedElements;
-    private int denseCount = 0;
+    internal bool[] _activatedElements;
+    internal int denseCount = 0;
 
     public ref T this[int id] => ref _compBuffer[id];
     public ref T AttainByDense(int id) => ref _compBuffer[_activeComponentsDense[id]];
@@ -25,23 +25,23 @@ public class Module2<T> : IModule<T>
     public ImmutableArray<int> GetDenseSet() => [ .. _activeComponentsDense ];
     public ImmutableArray<bool> ActivatedElements() => [.. _activatedElements ];
 
-    public Module2(ushort initLength)
+    public Module(int initLength)
     {
         _compBuffer = new T[initLength];
         _activeComponentsSparse = new int[initLength];
         _activatedElements = new bool[initLength];
     }
 
-    public Module2(T[] initBuffer)
+    public Module(T[] initBuffer)
     {
         _compBuffer = initBuffer;
         _activeComponentsSparse = new int[initBuffer.Length];
         _activatedElements = new bool[initBuffer.Length];
     }
 
-    public bool IsActive(ushort index) => _activatedElements[index] == true;
+    public bool IsActive(int index) => _activatedElements[index];
 
-    public void ToggleElement(ushort index, bool mode)
+    public void ToggleElement(int index, bool mode)
     {
         if (index > Length - 1) throw new ArgumentOutOfRangeException($"index: {index} is out of bounds of the module.");
         
@@ -59,7 +59,7 @@ public class Module2<T> : IModule<T>
         _activeComponentsDense = new int[denseCount];
 
         ushort _denseCounter = 0;
-        for(ushort i = 0; i < Length; i++)
+        for(int i = 0; i < Length; i++)
         {
             if (!_activatedElements[i]) continue;
 
@@ -69,7 +69,7 @@ public class Module2<T> : IModule<T>
         }
     }
 
-    public void ResizeModule(ushort newLength)
+    public void ResizeModule(int newLength)
     {
         denseCount = 0;
         bool isLower = newLength < Length;
@@ -79,7 +79,7 @@ public class Module2<T> : IModule<T>
         _activeComponentsSparse = new int[newLength];
         bool[] _activatedElems = new bool[newLength];
 
-        for(ushort i = 0; i < min; i++)
+        for(int i = 0; i < min; i++)
         {
             newBuffer[i] = _compBuffer[i];
 
@@ -94,7 +94,7 @@ public class Module2<T> : IModule<T>
         if (isLower) Refresh();
     }
 
-    public void ToggleElementSelection(ushort[] indices, bool mode)
+    public void ToggleElementSelection(int[] indices, bool mode)
     {
         int setter = mode ? 1 : -1;
         var prevDenseCount = denseCount;

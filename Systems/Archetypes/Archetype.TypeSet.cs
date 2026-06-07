@@ -22,27 +22,15 @@ public partial class Archetype
         module.ToggleElement(index, toggle);
     }
 
-    public void ToggleElementSelection<T>(ushort[] indices, bool toggle)
+    public void ToggleElementSelection<T>(int[] indices, bool toggle)
     {
         var module = GetModule<T>();
         module.ToggleElementSelection(indices, toggle);
     }
 
-    public bool IsElementValid<T>(ushort index)
+    public bool IsElementActive<T>(int index)
     {
         var module = GetModule<T>();
-        return module.IsElementValid(index);
-    }
-
-    public bool AnyElementsValid<T>(ushort[] indices)
-    {
-        var module = GetModule<T>();
-        return module.AnyElementsValid(indices);
-    }
-
-    public bool AllElementsValid<T>(ushort[] indices)
-    {
-        var module = GetModule<T>();
-        return module.AllElementsValid(indices);
+        return module.IsActive(index);
     }
 }

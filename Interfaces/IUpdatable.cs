@@ -12,7 +12,7 @@ public interface IUpdatable
     void Update();
 }
 
-public interface IUpdatable<T> : IUpdatable
+public interface IUpdatable<T>
 {
     void Update(ref T component);
 }
